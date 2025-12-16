@@ -4,6 +4,10 @@ services:
     env_file: .env
     ports:
       - "3000:3000"
+      # mediasoup RTC (UDP) - necessário para WebRTC funcionar fora do container
+      - "40000-40100:40000-40100/udp"
+      # fallback TCP (opcional). Se quiser, descomente:
+      # - "40000-40100:40000-40100/tcp"
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "node", "-e", "fetch('http://localhost:3000/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]

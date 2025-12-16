@@ -1,6 +1,9 @@
 # ---- build client ----
 FROM node:20-bookworm AS client
 WORKDIR /app
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  python3 make g++ \
+  && rm -rf /var/lib/apt/lists/*
 COPY package.json package-lock.json ./
 COPY client/package.json ./client/
 RUN npm ci
@@ -10,6 +13,9 @@ RUN npm run client:build
 # ---- build server ----
 FROM node:20-bookworm AS server
 WORKDIR /app
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  python3 make g++ \
+  && rm -rf /var/lib/apt/lists/*
 COPY package.json package-lock.json ./
 COPY server/package.json ./server/
 RUN npm ci

@@ -7,21 +7,44 @@
     <style>
       body { font-family: system-ui, sans-serif; margin: 24px; }
       .row { display:flex; gap: 12px; flex-wrap: wrap; align-items: center; }
-      input, button { padding: 10px; font-size: 14px; }
+      input, button, select, label { padding: 10px; font-size: 14px; }
       #log { white-space: pre-wrap; background: #111; color: #eee; padding: 12px; border-radius: 8px; min-height: 120px; }
       .pill { padding: 2px 8px; border-radius: 999px; border: 1px solid #ddd; }
+      .small { font-size: 12px; opacity: 0.8; }
     </style>
   </head>
   <body>
     <h1>YourVoice (Host-local)</h1>
-    <p>UI mínima para validar: HTTP + WebSocket + salas.</p>
+    <p class="small">VPN-only: abra pelo IP da VPN do host. Clique “Ativar mic” para falar.</p>
 
     <div class="row">
       <input id="roomId" placeholder="sala" value="amigos" />
       <input id="name" placeholder="nome" value="voce" />
+      <input id="key" placeholder="room key (se ativado)" />
       <button id="join">Entrar</button>
       <button id="leave">Sair</button>
       <span id="status" class="pill">desconectado</span>
+    </div>
+
+    <div class="row" style="margin-top: 12px;">
+      <button id="mic">Ativar mic</button>
+      <button id="mute">Mute</button>
+
+      <label>
+        Modo:
+        <select id="mode">
+          <option value="open">Aberto</option>
+          <option value="ptt">PTT (segure V)</option>
+        </select>
+      </label>
+
+      <label>
+        AEC (eco):
+        <select id="aec">
+          <option value="on" selected>On</option>
+          <option value="off">Off</option>
+        </select>
+      </label>
     </div>
 
     <h3>Log</h3>

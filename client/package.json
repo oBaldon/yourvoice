@@ -7,6 +7,7 @@
     "build": "vite build"
   },
   "dependencies": {
+    "mediasoup-client": "^3.7.14",
     "socket.io-client": "^4.8.1"
   },
   "devDependencies": {

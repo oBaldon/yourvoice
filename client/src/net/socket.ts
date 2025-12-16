@@ -3,21 +3,22 @@ import { io, Socket } from "socket.io-client";
 
 export type Peer = { id: string; name?: string };
 
-export type JoinResult =
-  | { ok: true; id: string; roomId: string }
-  | { ok: false; error: string };
+export type JoinOk = {
+  ok: true;
+  id: string;
+  roomId: string;
+  rtpCapabilities: any;
+  producers: Array<{ producerId: string; peerId: string; peerName: string }>;
+};
 
+export type JoinResult = JoinOk | { ok: false; error: string };
 export type LeaveResult = { ok: true } | { ok: false; error: string };
 
 export class YourVoiceSocket {
   private socket: Socket;
 
   constructor() {
-    // same-origin (served by the host). Works over VPN IP as well.
-    this.socket = io("/", {
-      transports: ["websocket"],
-      autoConnect: true
-    });
+    this.socket = io("/", { transports: ["websocket"], autoConnect: true });
   }
 
   onConnect(cb: (id: string) => void) {
@@ -36,21 +37,49 @@ export class YourVoiceSocket {
     this.socket.on("peer-left", cb);
   }
 
+  onNewProducer(cb: (p: { producerId: string; peerId: string; peerName: string }) => void) {
+    this.socket.on("new-producer", cb);
+  }
+
   echo(msg: string) {
     return new Promise<{ ok: boolean; msg: unknown }>((resolve) => {
       this.socket.emit("echo", msg, resolve);
     });
   }
 
-  join(roomId: string, name: string) {
+  join(roomId: string, name: string, key?: string) {
     return new Promise<JoinResult>((resolve) => {
-      this.socket.emit("join", { roomId, name }, resolve);
+      this.socket.emit("join", { roomId, name, key }, resolve);
     });
   }
 
   leave(roomId: string) {
     return new Promise<LeaveResult>((resolve) => {
       this.socket.emit("leave", { roomId }, resolve);
+    });
+  }
+
+  createTransport(roomId: string, direction: "send" | "recv") {
+    return new Promise<any>((resolve) => {
+      this.socket.emit("create-transport", { roomId, direction }, resolve);
+    });
+  }
+
+  connectTransport(roomId: string, direction: "send" | "recv", dtlsParameters: any) {
+    return new Promise<any>((resolve) => {
+      this.socket.emit("connect-transport", { roomId, direction, dtlsParameters }, resolve);
+    });
+  }
+
+  produce(roomId: string, kind: any, rtpParameters: any) {
+    return new Promise<any>((resolve) => {
+      this.socket.emit("produce", { roomId, kind, rtpParameters }, resolve);
+    });
+  }
+
+  consume(roomId: string, producerId: string, rtpCapabilities: any) {
+    return new Promise<any>((resolve) => {
+      this.socket.emit("consume", { roomId, producerId, rtpCapabilities }, resolve);
     });
   }
 
