@@ -1,7 +1,6 @@
 ![YourVoice banner](assets/banner.png)
-# YourVoice
 
-Chat de voz auto-hosteado para grupos pequenos (2–5 pessoas), pensado para uso durante jogos: **latência mínima**, **impacto mínimo em FPS** e **sem servidor público obrigatório**.
+Chat de voz auto-hosteado para grupos pequenos, pensado para uso durante jogos: **latência mínima**, **impacto mínimo em FPS** e **sem servidor público obrigatório**.
 
 O modelo de uso é “Minecraft via VPN”: um amigo hosteia o servidor na própria máquina e os demais se conectam usando o **IP/hostname da VPN** (Tailscale/ZeroTier/Hamachi).
 
