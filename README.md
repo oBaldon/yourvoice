@@ -159,6 +159,7 @@ Checklist:
 * Evitar relay/rota internacional quando possível
 * Testar UDP (algumas redes corporativas bloqueiam)
 * Preferir headset (reduz necessidade de AEC)
+* **Conferir no próprio app o indicador/log do caminho de conexão** (ex.: direct vs relay vs desconhecido), para facilitar diagnóstico e comparar rotas entre host e clientes.
 
 ---
 
@@ -173,7 +174,7 @@ Checklist:
 ## Roadmap
 
 * MVP: sala de voz, mute, volume, modos Aberto/PTT
-* Diagnóstico: indicadores de conexão (direct/relay) quando aplicável
+* Diagnóstico: **indicador + log do estilo de conexão** (direct/relay/desconhecido, quando aplicável) e stats básicos (RTT/jitter/packet loss) para ajudar a entender latência em tempo real
 * Qualidade: ajustes simples de bitrate e VAD/DTX
 * Opcional futuro: wrapper desktop (apenas se PTT global for indispensável)
 
@@ -312,3 +313,41 @@ Notas:
 * O host serve a UI e coordena a sessão (sinalização).
 * A mídia de voz é WebRTC/UDP; a VPN fornece conectividade IP entre os nós.
 * Relay/rotas indiretas na VPN aumentam latência; priorize “direct” quando possível.
+
+## MVP de validação
+
+### Objetivo
+
+Validar rapidamente se o YourVoice entrega voz competitiva para 2–5 pessoas, com:
+
+* latência baixa e consistente
+* consumo mínimo de CPU no cliente (sem afetar FPS)
+* funcionamento confiável atrás de CGNAT usando VPN/overlay
+
+### Critérios de sucesso
+
+* Estabilidade: 30+ minutos de sessão sem quedas frequentes; quando a rede oscilar, reconectar sem travar.
+* Diagnóstico: indicador + log no app do caminho (direct / relay / desconhecido).
+* Qualidade (via WebRTC `getStats()`): RTT, jitter e packet loss baixos o suficiente para conversa natural na maior parte do tempo.
+* Recursos: CPU baixa no cliente durante jogo (sem queda perceptível de FPS).
+* Onboarding: host sobe o servidor; amigos entram pelo IP da VPN + link, com passos simples o suficiente para repetir antes de cada partida.
+
+### Como medir
+
+* No app: exibir e registrar (log): modo de conexão, RTT, jitter, packet loss.
+* Referência: `chrome://webrtc-internals` e ferramentas/diagnóstico da VPN (quando disponíveis).
+* Recursos: monitorar CPU do processo do navegador durante o teste (com e sem jogo aberto).
+
+### Cenários de teste
+
+* 2 pessoas (baseline): mesma cidade/região, ambos com headset.
+* 3–5 pessoas (alvo): redes diferentes (dois ISPs distintos quando possível).
+* Caso difícil: um participante em rede mais restritiva (4G/hotspot ou NAT mais rígido) para observar fallback.
+
+### Saídas do MVP
+
+* Relatório simples por cenário: caminho (direct/relay), RTT/jitter/packet loss, estabilidade (quedas) e impressão subjetiva de naturalidade.
+* Decisão go/no-go:
+
+  * Go: desempenho estável e competitivo na maioria dos cenários reais do grupo.
+  * No-go: queda frequente em relay fora do Brasil ou variabilidade alta a ponto de ficar pior que alternativas comuns.
