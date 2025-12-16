@@ -2,7 +2,13 @@
 import type { Socket } from "socket.io";
 import type * as mediasoup from "mediasoup";
 import { config } from "../config.js";
-import { getOrCreateRoom, getRoom, listProducers, removeRoomIfEmpty, type Peer } from "../sfu/room.js";
+import {
+  getOrCreateRoom,
+  getRoom,
+  listProducers,
+  removeRoomIfEmpty,
+  type Peer
+} from "../sfu/room.js";
 import { createWebRtcTransport } from "../sfu/transport.js";
 import { connectTransport, consume, produce } from "../sfu/media.js";
 
@@ -19,6 +25,23 @@ function mustPeer(roomId: string, socketId: string) {
   return { room, peer };
 }
 
+function cleanupPeer(peer: Peer) {
+  // close consumers/producers before transports
+  for (const c of peer.consumers.values()) {
+    try { c.close(); } catch {}
+  }
+  for (const p of peer.producers.values()) {
+    try { p.close(); } catch {}
+  }
+  try { peer.recvTransport?.close(); } catch {}
+  try { peer.sendTransport?.close(); } catch {}
+
+  peer.consumers.clear();
+  peer.producers.clear();
+  peer.recvTransport = undefined;
+  peer.sendTransport = undefined;
+}
+
 export function registerEvents(socket: Socket) {
   socket.on("echo", (msg: unknown, cb?: (res: unknown) => void) => {
     cb?.({ ok: true, msg });
@@ -26,11 +49,15 @@ export function registerEvents(socket: Socket) {
 
   socket.on(
     "join",
-    async (payload: { roomId?: string; name?: string; key?: string }, cb?: (res: unknown) => void) => {
+    async (
+      payload: { roomId?: string; name?: string; key?: string },
+      cb?: (res: unknown) => void
+    ) => {
       try {
         const roomId = String(payload?.roomId ?? "").trim();
         const name = String(payload?.name ?? "").trim();
         const key = String(payload?.key ?? "");
+
         if (!roomId || !name) throw new Error("bad_request");
 
         if (config.roomKey !== "{{PLACEHOLDER}}" && key !== config.roomKey) {
@@ -39,16 +66,20 @@ export function registerEvents(socket: Socket) {
 
         const room = await getOrCreateRoom(roomId);
 
+        // if re-joining, cleanup old peer first
+        const existing = room.peers.get(socket.id);
+        if (existing) cleanupPeer(existing);
+
         const peer: Peer = {
           id: socket.id,
           name,
           producers: new Map(),
           consumers: new Map()
         };
+
         room.peers.set(socket.id, peer);
         socket.join(room.id);
 
-        // Send router RTP capabilities + existing producers in the room
         cb?.({
           ok: true,
           id: socket.id,
@@ -71,15 +102,22 @@ export function registerEvents(socket: Socket) {
       if (!roomId) throw new Error("bad_request");
 
       const room = getRoom(roomId);
-      if (room) {
-        const peer = room.peers.get(socket.id);
-        if (peer) cleanupPeer(peer);
+      if (!room) {
+        cb?.({ ok: true }); // idempotente
+        return;
+      }
+
+      const peer = room.peers.get(socket.id);
+      if (peer) {
+        cleanupPeer(peer);
         room.peers.delete(socket.id);
         socket.to(room.id).emit("peer-left", { id: socket.id });
-        removeRoomIfEmpty(room.id);
+        console.log(`[room:${room.id}] left`, peer.name, socket.id);
       }
 
       socket.leave(roomId);
+      removeRoomIfEmpty(room.id);
+
       cb?.({ ok: true });
     } catch (e: any) {
       cb?.({ ok: false, error: e?.message ?? "leave_failed" });
@@ -88,7 +126,10 @@ export function registerEvents(socket: Socket) {
 
   socket.on(
     "create-transport",
-    async (payload: { roomId?: string; direction?: "send" | "recv" }, cb?: (res: unknown) => void) => {
+    async (
+      payload: { roomId?: string; direction?: "send" | "recv" },
+      cb?: (res: unknown) => void
+    ) => {
       try {
         const roomId = String(payload?.roomId ?? "").trim();
         const direction = payload?.direction;
@@ -116,7 +157,11 @@ export function registerEvents(socket: Socket) {
   socket.on(
     "connect-transport",
     async (
-      payload: { roomId?: string; direction?: "send" | "recv"; dtlsParameters?: mediasoup.types.DtlsParameters },
+      payload: {
+        roomId?: string;
+        direction?: "send" | "recv";
+        dtlsParameters?: mediasoup.types.DtlsParameters;
+      },
       cb?: (res: unknown) => void
     ) => {
       try {
@@ -140,7 +185,11 @@ export function registerEvents(socket: Socket) {
   socket.on(
     "produce",
     async (
-      payload: { roomId?: string; kind?: mediasoup.types.MediaKind; rtpParameters?: mediasoup.types.RtpParameters },
+      payload: {
+        roomId?: string;
+        kind?: mediasoup.types.MediaKind;
+        rtpParameters?: mediasoup.types.RtpParameters;
+      },
       cb?: (res: unknown) => void
     ) => {
       try {
@@ -197,28 +246,31 @@ export function registerEvents(socket: Socket) {
     }
   );
 
-  function cleanupPeer(peer: Peer) {
-    peer.consumers.forEach((c) => c.close());
-    peer.producers.forEach((p) => p.close());
-    peer.recvTransport?.close();
-    peer.sendTransport?.close();
-    peer.consumers.clear();
-    peer.producers.clear();
-  }
-
   socket.on("disconnect", () => {
     // best-effort cleanup per joined roomId
     const roomIds = [...socket.rooms].filter((r) => r !== socket.id);
+
     for (const roomId of roomIds) {
-      const room = getRoom(roomId);
-      if (!room) continue;
-      const peer = room.peers.get(socket.id);
-      if (!peer) continue;
-      cleanupPeer(peer);
-      room.peers.delete(socket.id);
-      socket.to(room.id).emit("peer-left", { id: socket.id });
-      removeRoomIfEmpty(room.id);
-      console.log(`[room:${room.id}] disconnected`, peer.name, socket.id);
+      try {
+        const room = getRoom(roomId);
+        if (!room) continue;
+
+        const peer = room.peers.get(socket.id);
+        if (!peer) continue;
+
+        cleanupPeer(peer);
+        room.peers.delete(socket.id);
+
+        socket.to(room.id).emit("peer-left", { id: socket.id });
+        removeRoomIfEmpty(room.id);
+
+        // not strictly necessary, but keeps adapter state tidy
+        try { socket.leave(roomId); } catch {}
+
+        console.log(`[room:${room.id}] disconnected`, peer.name, socket.id);
+      } catch (e: any) {
+        console.warn("[disconnect] cleanup error", e?.message ?? String(e));
+      }
     }
   });
 }
