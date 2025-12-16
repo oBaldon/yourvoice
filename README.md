@@ -1,3 +1,4 @@
+![YourVoice banner](assets/banner.png)
 # YourVoice
 
 Chat de voz auto-hosteado para grupos pequenos (2–5 pessoas), pensado para uso durante jogos: **latência mínima**, **impacto mínimo em FPS** e **sem servidor público obrigatório**.
