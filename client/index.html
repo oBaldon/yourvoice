@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>YourVoice</title>
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 24px; }
+      .row { display:flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+      input, button { padding: 10px; font-size: 14px; }
+      #log { white-space: pre-wrap; background: #111; color: #eee; padding: 12px; border-radius: 8px; min-height: 120px; }
+      .pill { padding: 2px 8px; border-radius: 999px; border: 1px solid #ddd; }
+    </style>
+  </head>
+  <body>
+    <h1>YourVoice (Host-local)</h1>
+    <p>UI mínima para validar: HTTP + WebSocket + salas.</p>
+
+    <div class="row">
+      <input id="roomId" placeholder="sala" value="amigos" />
+      <input id="name" placeholder="nome" value="voce" />
+      <button id="join">Entrar</button>
+      <button id="leave">Sair</button>
+      <span id="status" class="pill">desconectado</span>
+    </div>
+
+    <h3>Log</h3>
+    <div id="log"></div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

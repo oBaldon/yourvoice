@@ -1,0 +1,14 @@
+{
+  "name": "yourvoice",
+  "private": true,
+  "workspaces": ["server", "client"],
+  "dependencies": {
+    "socket.io-client": "^4.8.1"
+  },
+  "scripts": {
+    "server:build": "npm -w server run build",
+    "server:dev": "npm -w server run dev",
+    "client:dev": "npm -w client run dev",
+    "client:build": "npm -w client run build"
+  }
+}
