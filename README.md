@@ -278,34 +278,31 @@ Checklist:
 # Diagrama de arquitetura
 
 ```mermaid
-graph TD
-  subgraph VPN[VPN / Overlay (Tailscale, ZeroTier, Hamachi)]
-    H[Host (amigo)
-UI Web + Sinalização (WS)
-SFU forward-only]
-    C1[Cliente 1 (Browser)
-WebRTC]
-    C2[Cliente 2 (Browser)
-WebRTC]
-    C3[Cliente 3 (Browser)
-WebRTC]
+flowchart TD
+  %% --- Nodes ---
+  VPN["VPN / Overlay (Tailscale, ZeroTier, Hamachi)"]
+
+  subgraph Clients["Clientes (2–5)"]
+    C1["Cliente A<br/>Browser/App (WebRTC)"]
+    C2["Cliente B<br/>Browser/App (WebRTC)"]
+    C3["Cliente C<br/>Browser/App (WebRTC)"]
   end
 
-  C1 -- HTTP (UI) --> H
-  C2 -- HTTP (UI) --> H
-  C3 -- HTTP (UI) --> H
+  subgraph Host["Host (um amigo)"]
+    H["YourVoice Host<br/>HTTP + WebSocket + SFU (mediasoup)<br/>(forward-only)"]
+  end
 
-  C1 -- WebSocket (sinalização) --> H
-  C2 -- WebSocket (sinalização) --> H
-  C3 -- WebSocket (sinalização) --> H
+  %% --- Links ---
+  C1 <-->|"IP da VPN"| VPN
+  C2 <-->|"IP da VPN"| VPN
+  C3 <-->|"IP da VPN"| VPN
 
-  C1 -- WebRTC/UDP (Opus) --> H
-  C2 -- WebRTC/UDP (Opus) --> H
-  C3 -- WebRTC/UDP (Opus) --> H
+  VPN <-->|"UDP direto (ideal)<br/>ou relay (fallback)"| H
 
-  H -- Encaminha áudio --> C1
-  H -- Encaminha áudio --> C2
-  H -- Encaminha áudio --> C3
+  H -->|"RTP/Opus encaminhado"| C1
+  H -->|"RTP/Opus encaminhado"| C2
+  H -->|"RTP/Opus encaminhado"| C3
+
 ```
 
 Notas:
