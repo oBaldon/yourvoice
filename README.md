@@ -251,6 +251,29 @@ Checklist:
 
 ---
 
+## ADR-0006 — Web primeiro, wrapper opcional
+
+**Status:** Aceito
+
+**Decisão:** Iniciar o projeto como **web puro** e considerar wrappers apenas se houver necessidade real.
+
+**Contexto:** Há a percepção de que aplicações desktop dedicadas podem oferecer mais previsibilidade que a versão web em navegadores carregados. Além disso, existe interesse futuro em **uso mobile**.
+
+**Motivação:** Web puro oferece menor complexidade, menor consumo e zero atrito de instalação. Wrappers só se justificam se forem exigidos **atalhos globais de PTT**, maior previsibilidade de ambiente ou melhor integração com o sistema operacional.
+
+**Evolução planejada:**
+
+* **Desktop:** wrapper opcional (preferencialmente **Tauri**) caso PTT global ou consistência se tornem críticos.
+* **Mobile:** considerar empacotamento (ex.: WebView dedicado ou solução multiplataforma) quando houver demanda, mantendo a mesma base de UI e lógica.
+
+**Consequências:**
+
+* MVP permanece simples, leve e fácil de distribuir.
+* A arquitetura backend não muda ao adicionar desktop ou mobile.
+* Cliente web continua sendo a referência funcional.
+
+---
+
 # Diagrama de arquitetura
 
 ```mermaid
