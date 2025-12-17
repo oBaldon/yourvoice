@@ -20,7 +20,15 @@ export type Room = {
 const rooms = new Map<string, Room>();
 
 const mediaCodecs: mediasoup.types.RtpCodecCapability[] = [
-  { kind: "audio", mimeType: "audio/opus", clockRate: 48000, channels: 2 }
+  {
+    kind: "audio",
+    mimeType: "audio/opus",
+    clockRate: 48000,
+    channels: 2,
+    // Opus costuma usar PT 111; mediasoup types agora exigem preferredPayloadType
+    preferredPayloadType: 111,
+    parameters: {}
+  }
 ];
 
 export async function getOrCreateRoom(roomId: string): Promise<Room> {

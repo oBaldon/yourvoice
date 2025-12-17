@@ -23,7 +23,7 @@ export async function produce(
   peer.producers.set(producer.id, producer);
 
   producer.on("transportclose", () => peer.producers.delete(producer.id));
-  producer.on("close", () => peer.producers.delete(producer.id));
+  producer.on("@close", () => peer.producers.delete(producer.id));
 
   return producer;
 }
@@ -50,6 +50,7 @@ export async function consume(
 
   consumer.on("transportclose", () => peer.consumers.delete(consumer.id));
   consumer.on("producerclose", () => peer.consumers.delete(consumer.id));
+  consumer.on("@close", () => peer.consumers.delete(consumer.id));
 
   return consumer;
 }
