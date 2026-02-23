@@ -1,0 +1,31 @@
+name: "Docs"
+description: "Melhoria de documentação (README, guias, troubleshooting)."
+title: "[docs] "
+labels: ["type:docs"]
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: Objetivo
+      placeholder: "Ex.: guia de uso via Tailscale + troubleshooting de latência."
+    validations:
+      required: true
+
+  - type: textarea
+    id: tasks
+    attributes:
+      label: Checklist
+      value: |
+        - [ ]
+        - [ ]
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Critério de aceite
+      value: |
+        - [ ]
+    validations:
+      required: true

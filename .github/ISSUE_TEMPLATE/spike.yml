@@ -1,0 +1,30 @@
+name: "Spike / Pesquisa"
+description: "Explorar alternativas e reduzir incerteza técnica."
+title: "[spike] "
+labels: ["type:spike"]
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: Pergunta a responder
+      placeholder: "Ex.: mediasoup vs ion-sfu para o MVP?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: approach
+    attributes:
+      label: Abordagem
+      value: |
+        - O que vamos testar?
+        - Quais métricas/saídas?
+    validations:
+      required: true
+
+  - type: textarea
+    id: deliverable
+    attributes:
+      label: Saída esperada
+      placeholder: "Documento com decisão + mini POC + trade-offs."
+    validations:
+      required: true

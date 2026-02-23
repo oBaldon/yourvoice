@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Discussões / Ideias
+    url: https://github.com/{{OWNER}}/{{REPO}}/discussions
+    about: Use para perguntas abertas, brainstorm e decisões de produto.

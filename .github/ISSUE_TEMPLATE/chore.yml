@@ -1,0 +1,44 @@
+name: "Chore / Infra / Refactor"
+description: "Manutenção, infra, refatoração, dívida técnica."
+title: "[chore] "
+labels: ["type:chore"]
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: Área
+      options:
+        - "infra"
+        - "server"
+        - "web"
+        - "docs"
+        - "ci"
+    validations:
+      required: true
+
+  - type: textarea
+    id: goal
+    attributes:
+      label: Objetivo
+      placeholder: "Ex.: adicionar k6 smoke no CI."
+    validations:
+      required: true
+
+  - type: textarea
+    id: tasks
+    attributes:
+      label: Checklist
+      value: |
+        - [ ]
+        - [ ]
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Critério de aceite
+      value: |
+        - [ ]
+    validations:
+      required: true

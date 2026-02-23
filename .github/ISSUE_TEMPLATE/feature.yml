@@ -1,0 +1,93 @@
+name: "Feature (MVP)"
+description: "Funcionalidade incremental com critério de aceite objetivo."
+title: "[feat] "
+labels: ["type:feature"]
+body:
+  - type: dropdown
+    id: milestone
+    attributes:
+      label: Milestone
+      options:
+        - "1 — Base executável"
+        - "2 — Sinalização + sala"
+        - "3 — WebRTC P2P"
+        - "4 — SFU forward-only"
+        - "5 — Diagnóstico"
+        - "6 — Operação real"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Área
+      options:
+        - "web"
+        - "server"
+        - "infra"
+        - "webrtc"
+        - "sfu"
+        - "docs"
+    validations:
+      required: true
+
+  - type: textarea
+    id: goal
+    attributes:
+      label: Objetivo
+      description: "O que queremos habilitar para o usuário?"
+      placeholder: "Ex.: Entrar em uma sala e ver a lista de participantes em tempo real."
+    validations:
+      required: true
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Escopo (inclui / não inclui)
+      description: "Deixe explícito o que entra e o que fica fora."
+      value: |
+        Inclui:
+        -
+
+        Não inclui:
+        -
+    validations:
+      required: true
+
+  - type: textarea
+    id: tasks
+    attributes:
+      label: Checklist de tarefas
+      value: |
+        - [ ]
+        - [ ]
+        - [ ]
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Critério de aceite (testável)
+      value: |
+        - [ ]
+        - [ ]
+    validations:
+      required: true
+
+  - type: textarea
+    id: smoke
+    attributes:
+      label: Smoke test (passo-a-passo)
+      value: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notas / Riscos
+      placeholder: "Ex.: limites do browser para PTT global; redes que bloqueiam UDP."

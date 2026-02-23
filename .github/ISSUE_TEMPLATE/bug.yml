@@ -1,0 +1,49 @@
+name: "Bug"
+description: "Relato de problema com passos de reprodução."
+title: "[bug] "
+labels: ["type:bug"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Resumo
+      placeholder: "O que está quebrado?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Passos para reproduzir
+      value: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Comportamento esperado
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Comportamento atual
+    validations:
+      required: true
+
+  - type: textarea
+    id: env
+    attributes:
+      label: Ambiente
+      description: "Browser/OS, VPN (se houver), commit/versão, logs."
+      placeholder: |
+        Browser:
+        OS:
+        VPN:
+        Commit/Tag:
+        Logs:
