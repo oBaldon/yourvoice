@@ -298,5 +298,3 @@ Validar se o YourVoice entrega voz competitiva para 2–5 pessoas com:
 * Direct (quando possível)
 * VPN (padrão)
 * Redes restritivas (4G/hotspot / Wi-Fi corporativo) com Pro Relay
-
-```
