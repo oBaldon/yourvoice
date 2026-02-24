@@ -115,7 +115,7 @@ flowchart TD
   C1 -.->|"se necessário"| RELAY -.-> H
   C2 -.->|"se necessário"| RELAY -.-> H
   C3 -.->|"se necessário"| RELAY -.-> H
-````
+```
 
 ---
 
@@ -273,6 +273,11 @@ Checklist:
 
 **Status:** Aceito
 **Decisão:** Opus, VAD/DTX e AEC sob demanda.
+
+## ADR-0006 — Web primeiro, wrapper opcional
+
+**Status:** Aceito
+**Decisão:** Iniciar como **web puro** e considerar wrapper desktop/mobile apenas se houver necessidade real (ex.: PTT global).
 
 ---
 
