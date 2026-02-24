@@ -9,10 +9,14 @@ body:
       label: Área
       options:
         - "infra"
+        - "ci"
         - "server"
         - "web"
+        - "webrtc"
+        - "sfu"
+        - "connectivity"
+        - "pro"
         - "docs"
-        - "ci"
     validations:
       required: true
 
@@ -20,7 +24,7 @@ body:
     id: goal
     attributes:
       label: Objetivo
-      placeholder: "Ex.: adicionar k6 smoke no CI."
+      placeholder: "Ex.: adicionar k6 smoke no CI; reduzir payload/CPU; ajustar rate limit."
     validations:
       required: true
 

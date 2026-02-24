@@ -3,6 +3,36 @@ description: "Relato de problema com passos de reprodução."
 title: "[bug] "
 labels: ["type:bug"]
 body:
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Modo de conexão
+      description: "Qual modo estava ativo quando o bug ocorreu?"
+      options:
+        - "Direct"
+        - "VPN/Overlay"
+        - "Relay (Pro)"
+        - "Desconhecido"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Área
+      options:
+        - "web"
+        - "server"
+        - "webrtc"
+        - "sfu"
+        - "connectivity"
+        - "pro"
+        - "infra"
+        - "docs"
+        - "unknown"
+    validations:
+      required: true
+
   - type: textarea
     id: summary
     attributes:
@@ -40,10 +70,11 @@ body:
     id: env
     attributes:
       label: Ambiente
-      description: "Browser/OS, VPN (se houver), commit/versão, logs."
+      description: "Browser/OS, rede/VPN (se houver), commit/versão, logs."
       placeholder: |
         Browser:
         OS:
-        VPN:
+        Rede (Wi-Fi/Cabo/4G):
+        VPN (se houver):
         Commit/Tag:
         Logs:

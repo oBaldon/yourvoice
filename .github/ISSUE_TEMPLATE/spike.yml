@@ -3,11 +3,27 @@ description: "Explorar alternativas e reduzir incerteza técnica."
 title: "[spike] "
 labels: ["type:spike"]
 body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: Área
+      options:
+        - "webrtc"
+        - "sfu"
+        - "connectivity"
+        - "pro"
+        - "infra"
+        - "web"
+        - "server"
+        - "docs"
+    validations:
+      required: true
+
   - type: textarea
     id: question
     attributes:
       label: Pergunta a responder
-      placeholder: "Ex.: mediasoup vs ion-sfu para o MVP?"
+      placeholder: "Ex.: como forçar/diagnosticar Direct vs Relay? Qual política de quotas no Pro?"
     validations:
       required: true
 

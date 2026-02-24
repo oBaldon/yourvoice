@@ -7,7 +7,7 @@ body:
     id: goal
     attributes:
       label: Objetivo
-      placeholder: "Ex.: guia de uso via Tailscale + troubleshooting de latência."
+      placeholder: "Ex.: guia Direct vs VPN; como identificar Direct/VPN/Relay no app; troubleshooting de latência."
     validations:
       required: true
 

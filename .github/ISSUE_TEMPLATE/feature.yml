@@ -10,10 +10,10 @@ body:
       options:
         - "1 — Base executável"
         - "2 — Sinalização + sala"
-        - "3 — WebRTC P2P"
+        - "3 — WebRTC Direct baseline"
         - "4 — SFU forward-only"
-        - "5 — Diagnóstico"
-        - "6 — Operação real"
+        - "5 — Free (VPN + Diagnóstico)"
+        - "6 — Pro (Relay BR + Release)"
     validations:
       required: true
 
@@ -27,6 +27,8 @@ body:
         - "infra"
         - "webrtc"
         - "sfu"
+        - "connectivity"
+        - "pro"
         - "docs"
     validations:
       required: true
@@ -90,4 +92,4 @@ body:
     id: notes
     attributes:
       label: Notas / Riscos
-      placeholder: "Ex.: limites do browser para PTT global; redes que bloqueiam UDP."
+      placeholder: "Ex.: redes que bloqueiam UDP; quando cair em VPN/Relay; trade-offs de latência."
