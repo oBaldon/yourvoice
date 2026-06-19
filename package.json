@@ -9,6 +9,16 @@
     "server:build": "npm -w server run build",
     "server:dev": "npm -w server run dev",
     "client:dev": "npm -w client run dev",
-    "client:build": "npm -w client run build"
+    "client:build": "npm -w client run build",
+    "build": "npm run server:build && npm run client:build",
+    "audit:all": "npm audit",
+    "audit:prod": "npm audit --omit=dev",
+    "smoke": "bash scripts/smoke.sh http://localhost:3000",
+    "docker:build": "docker compose --progress=plain build",
+    "docker:build:clean": "docker compose --progress=plain build --no-cache",
+    "docker:up": "docker compose up",
+    "docker:down": "docker compose down --remove-orphans",
+    "docker:smoke": "curl -f http://localhost:3000/health && curl -f http://localhost:3000/version && bash scripts/smoke.sh http://localhost:3000",
+    "docker:check-runtime": "docker compose run --rm yourvoice sh -lc 'test ! -x node_modules/.bin/vite && echo \"[ok] vite não está no runtime\" || echo \"[warn] vite ainda está no runtime\"; id'"
   }
 }
