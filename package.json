@@ -1,7 +1,10 @@
 {
   "name": "yourvoice",
   "private": true,
-  "workspaces": ["server", "client"],
+  "workspaces": [
+    "server",
+    "client"
+  ],
   "dependencies": {
     "socket.io-client": "^4.8.1"
   },
@@ -14,11 +17,17 @@
     "audit:all": "npm audit",
     "audit:prod": "npm audit --omit=dev",
     "smoke": "bash scripts/smoke.sh http://localhost:3000",
+    "smoke:room": "bash scripts/smoke-room.sh http://localhost:3000",
     "docker:build": "docker compose --progress=plain build",
     "docker:build:clean": "docker compose --progress=plain build --no-cache",
-    "docker:up": "docker compose up",
+    "docker:up": "docker compose up -d --remove-orphans",
+    "docker:up:fg": "docker compose up",
     "docker:down": "docker compose down --remove-orphans",
-    "docker:smoke": "curl -f http://localhost:3000/health && curl -f http://localhost:3000/version && bash scripts/smoke.sh http://localhost:3000",
-    "docker:check-runtime": "docker compose run --rm yourvoice sh -lc 'test ! -x node_modules/.bin/vite && echo \"[ok] vite não está no runtime\" || echo \"[warn] vite ainda está no runtime\"; id'"
+    "docker:ps": "docker compose ps",
+    "docker:logs": "docker compose logs --tail=120 yourvoice",
+    "docker:wait": "bash scripts/wait-health.sh http://localhost:3000",
+    "docker:smoke": "npm run docker:wait && curl -f http://localhost:3000/version && bash scripts/smoke.sh http://localhost:3000",
+    "docker:smoke:room": "bash scripts/smoke-room.sh http://localhost:3000",
+    "docker:check-runtime": "docker compose run --rm --no-deps yourvoice sh -lc 'test ! -x node_modules/.bin/vite && echo \"[ok] vite não está no runtime\" || echo \"[warn] vite ainda está no runtime\"; id'"
   }
 }

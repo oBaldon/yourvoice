@@ -8,11 +8,11 @@ curl -fsS "$BASE/health" | cat
 echo
 
 echo "[smoke] socket.io echo (rodando dentro do container)"
-docker compose exec -T yourvoice node - <<'NODE'
+docker compose exec -T -e BASE="$BASE" yourvoice node - <<'NODE'
 import { io } from "socket.io-client";
 
 const base = process.env.BASE || "http://localhost:3000";
-const socket = io(base, { transports: ["websocket"] });
+const socket = io(base, { transports: ["websocket"], timeout: 5000, reconnection: false });
 
 socket.on("connect", () => {
   socket.emit("echo", "ping", (res) => {

@@ -36,10 +36,37 @@ Este documento transforma o planejamento do `README.md` em um plano executável:
 
 ---
 
+## Status atual do projeto
+
+Estado atual: **Milestone 0 / Base executável validada parcialmente**.
+
+Concluído:
+
+- monorepo com workspaces `server` e `client`;
+- client Vite buildando;
+- server TypeScript buildando;
+- Docker multi-stage funcional;
+- runtime Docker com `npm prune --omit=dev`;
+- runtime sem `vite` e rodando como usuário `node`;
+- `/health` e `/version`;
+- smoke básico de Socket.IO com `echo`;
+- `npm audit --omit=dev` sem vulnerabilidades conhecidas.
+
+Pendente antes de fechar Milestone 1:
+
+- smoke automatizado de `join`/`leave`;
+- reconexão automática com rejoin;
+- validação manual da UI no browser;
+- validação real de áudio com 2 clientes;
+- hardening mínimo: validação de payload, limites por sala, rate limit e headers.
+
+
 ## Milestones (6 semanas)
 
 ### Milestone 1 — Base executável (Semana 1)
 **Meta:** `docker compose up --build` + UI abre + WS conecta/eco/reconecta.
+
+**Status atual:** parcialmente concluído. Docker, build, healthcheck e WS echo já estão funcionando. O próximo corte é validar `join`/`leave`, reconexão automática e UI manual.
 
 **Issues sugeridas**
 - Scaffold monorepo (apps/web + apps/server)
@@ -199,9 +226,10 @@ Este documento transforma o planejamento do `README.md` em um plano executável:
 ## Smoke tests (padrão)
 
 ### WS
-1. Conectar → join room → trocar mensagens
-2. Derrubar rede/fechar aba → reconectar
-3. Rejoin automático e estado consistente
+1. `npm run docker:smoke` → valida `/health` e Socket.IO `echo`.
+2. `npm run docker:smoke:room` → valida 2 clientes, `join`, `peer-joined`, `leave` e `peer-left`.
+3. Derrubar rede/fechar aba → reconectar.
+4. Rejoin automático e estado consistente.
 
 ### Áudio (Direct / VPN)
 1. 2 participantes → validar áudio

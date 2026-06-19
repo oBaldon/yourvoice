@@ -11,6 +11,65 @@ O **host** (um amigo) roda **a interface web + sinalização + SFU** na própria
 
 ---
 
+## Estado atual
+
+O projeto está na fase **Milestone 0 / base executável**.
+
+Validado até aqui:
+
+- build local do server e do client;
+- `npm audit --omit=dev` sem vulnerabilidades conhecidas de runtime;
+- Docker multi-stage buildando client e server;
+- runtime Docker sem dependências de build como `vite`;
+- container rodando como usuário não-root (`node`);
+- endpoints `/health` e `/version`;
+- smoke básico de Socket.IO com `echo`.
+
+Próximas validações antes de considerar Milestone 1 completa:
+
+- smoke de sala com `join`/`leave`;
+- reconexão automática com rejoin;
+- teste manual da UI no browser;
+- teste real de áudio com 2 clientes;
+- hardening mínimo de sala/payload/rate limit.
+
+### Validação local
+
+```bash
+cp .env.example .env
+npm ci --include=dev --no-audit
+
+npm run build
+npm run audit:prod
+
+npm run docker:down
+npm run docker:build:clean
+npm run docker:up
+```
+
+Em outro terminal:
+
+```bash
+npm run docker:check-runtime
+npm run docker:smoke
+npm run docker:smoke:room
+```
+
+Resultado esperado:
+
+```text
+[ok] vite não está no runtime
+uid=1000(node) gid=1000(node)
+{"ok":true}
+{"ok":true,"name":"yourvoice"}
+[ok] echo response: { ok: true, msg: 'ping' }
+[ok] alice joined
+[ok] bob joined
+[ok] peer-joined delivered
+[ok] peer-left delivered
+```
+
+
 ## Objetivos
 
 - Voz em tempo real com latência baixa (limitada principalmente pela rede)
