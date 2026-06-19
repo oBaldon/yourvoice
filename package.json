@@ -27,7 +27,7 @@
     "docker:logs": "docker compose logs --tail=120 yourvoice",
     "docker:wait": "bash scripts/wait-health.sh http://localhost:3000",
     "docker:smoke": "npm run docker:wait && curl -f http://localhost:3000/version && bash scripts/smoke.sh http://localhost:3000",
-    "docker:smoke:room": "bash scripts/smoke-room.sh http://localhost:3000",
+    "docker:smoke:room": "npm run docker:wait && bash scripts/smoke-room.sh http://localhost:3000",
     "docker:check-runtime": "docker compose run --rm --no-deps yourvoice sh -lc 'test ! -x node_modules/.bin/vite && echo \"[ok] vite não está no runtime\" || echo \"[warn] vite ainda está no runtime\"; id'"
   }
 }

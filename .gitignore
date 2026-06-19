@@ -46,7 +46,7 @@ Thumbs.db
 *~
 
 # --- docker ---
-**/.dockerignore
+# .dockerignore deve ser versionado para manter o contexto Docker pequeno.
 
 # --- misc ---
 *.pid

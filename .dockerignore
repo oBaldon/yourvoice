@@ -1,0 +1,48 @@
+# dependencies
+node_modules/
+**/node_modules/
+
+# build outputs
+dist/
+**/dist/
+build/
+**/build/
+server/public/
+*.tsbuildinfo
+
+# caches and test outputs
+coverage/
+**/coverage/
+.nyc_output/
+**/.cache/
+**/.vite/
+tmp/
+**/tmp/
+.temp/
+*.tmp
+
+# local env and secrets
+.env
+.env.*
+!.env.example
+
+# git/editor/os
+.git/
+.github/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# local artifacts
+*.zip
+*.patch

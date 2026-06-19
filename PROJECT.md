@@ -38,7 +38,7 @@ Este documento transforma o planejamento do `README.md` em um plano executável:
 
 ## Status atual do projeto
 
-Estado atual: **Milestone 0 / Base executável validada parcialmente**.
+Estado atual: **Milestone 0 / Base executável validada**.
 
 Concluído:
 
@@ -50,11 +50,11 @@ Concluído:
 - runtime sem `vite` e rodando como usuário `node`;
 - `/health` e `/version`;
 - smoke básico de Socket.IO com `echo`;
+- smoke automatizado de `join`/`leave`, incluindo eventos `peer-joined` e `peer-left`;
 - `npm audit --omit=dev` sem vulnerabilidades conhecidas.
 
 Pendente antes de fechar Milestone 1:
 
-- smoke automatizado de `join`/`leave`;
 - reconexão automática com rejoin;
 - validação manual da UI no browser;
 - validação real de áudio com 2 clientes;
@@ -66,13 +66,13 @@ Pendente antes de fechar Milestone 1:
 ### Milestone 1 — Base executável (Semana 1)
 **Meta:** `docker compose up --build` + UI abre + WS conecta/eco/reconecta.
 
-**Status atual:** parcialmente concluído. Docker, build, healthcheck e WS echo já estão funcionando. O próximo corte é validar `join`/`leave`, reconexão automática e UI manual.
+**Status atual:** base executável validada. Docker, build, healthcheck, WS echo e `join`/`leave` automatizado já estão funcionando. O próximo corte é validar reconexão automática, UI manual e áudio real com 2 clientes.
 
 **Issues sugeridas**
 - Scaffold monorepo (apps/web + apps/server)
 - Docker infra (compose + Dockerfiles + healthchecks)
 - Reverse proxy (Caddy) + WS upgrade
-- Server mínimo (`/healthz` + WS echo + logs)
+- Server mínimo (`/health` + WS echo + logs)
 - Web mínimo (Sala, Nome, Entrar + status)
 - Hardening mínimo (payload limit + rate limit + headers)
 

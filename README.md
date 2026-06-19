@@ -13,7 +13,7 @@ O **host** (um amigo) roda **a interface web + sinalização + SFU** na própria
 
 ## Estado atual
 
-O projeto está na fase **Milestone 0 / base executável**.
+O projeto está na fase **Milestone 0 / base executável validada**.
 
 Validado até aqui:
 
@@ -23,11 +23,11 @@ Validado até aqui:
 - runtime Docker sem dependências de build como `vite`;
 - container rodando como usuário não-root (`node`);
 - endpoints `/health` e `/version`;
-- smoke básico de Socket.IO com `echo`.
+- smoke básico de Socket.IO com `echo`;
+- smoke de sala com `join`/`leave`, incluindo eventos `peer-joined` e `peer-left`.
 
 Próximas validações antes de considerar Milestone 1 completa:
 
-- smoke de sala com `join`/`leave`;
 - reconexão automática com rejoin;
 - teste manual da UI no browser;
 - teste real de áudio com 2 clientes;
@@ -45,6 +45,7 @@ npm run audit:prod
 npm run docker:down
 npm run docker:build:clean
 npm run docker:up
+npm run docker:ps
 ```
 
 Em outro terminal:
